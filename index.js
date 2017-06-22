@@ -142,7 +142,7 @@ function watchAll(packageName, packageLinkDir, packageLocalNMDir, filesSpec, tel
                 
                 // If the file in the link dir is newer than the local file
                 if (localFileStat === undefined || linkFileStat.mtime.getTime() > localFileStat.mtime.getTime()) {
-                    if (linkFile !== 'package.json') {
+                    //if (linkFile !== 'package.json') {
                         var logPrefix = '    ';
 
                         if (numSlinks > 1) {
@@ -176,10 +176,10 @@ function watchAll(packageName, packageLinkDir, packageLocalNMDir, filesSpec, tel
                         // This is useful because watch processes will typically not watch inside e.g. node_modules,
                         // with the effect that we do not get a local watch triggered rebuild after slinked modules change.
                         fs.writeFileSync('.watch_trigger', 'AUTO GENERATED - add to .gitignore \n\nChange watch trigger file. Created/updated by e.g. slink. Used by build "watch" tools.');
-                    } else {
-                        console.log('*** Looks like the package.json file in the linked package has changed. Please reinstall and reslink.');
-                        process.exit(0);
-                    }
+                    //} else {
+                        //console.log('*** Looks like the package.json file in the linked package has changed. Please reinstall and reslink.');
+                        //process.exit(0);
+                    //}
                 }
             }
         }
