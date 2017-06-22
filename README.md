@@ -8,25 +8,25 @@ PITA because of two things:
 
 So in most cases `npm link` simply does not work.
 
-This package (`slink`) tries to provide a dev time mechanism that allows you to "slink" a package under development into
+This package (`xlink`) tries to provide a dev time mechanism that allows you to "xlink" a package under development into
 another package that uses it, allowing you to test the changes being made to the package under development. So, the "use case" is
 basically the same as `npm link`.
 
 The difference is that it doesn't use any `symlink`s and so doesn't have either of the issues listed above. It watches
-the source in the slinked package (under dev) and "synchronizes" any changes as they happen. But, it does __NOT__ touch the
+the source in the xlinked package (under dev) and "synchronizes" any changes as they happen. But, it does __NOT__ touch the
 contents of the `node_modules` directory.
 
 # Install
 
 ```sh
-npm install -g slink
+npm install -g xlink
 ```
 
 # Usage
 
-`slink` requires you to start by installing the package(s) under development (e.g. "A") into the package in which you will be testing
+`xlink` requires you to start by installing the package(s) under development (e.g. "A") into the package in which you will be testing
 the changes to "A" (e.g. "B"). Once "A" is installed, "B" will have a properly deduped "A" in it's `node_modules` dir. Now you can
-`slink` in "B", telling it to watch for and synchronize source changes in "A" into `node_modules/A`.
+`xlink` in "B", telling it to watch for and synchronize source changes in "A" into `node_modules/A`.
 
 e.g.
 
@@ -36,18 +36,18 @@ e.g.
 tfennelly@diego:~/projects/B $ npm install ../A
 ```
 
-`slink` "A" in "B" and make a source change to `../A/index.js`: 
+`xlink` "A" in "B" and make a source change to `../A/index.js`: 
 
 ```sh
-tfennelly@diego:~/projects/B $ slink ../A
+tfennelly@diego:~/projects/B $ xlink ../A
 Watching for changes in /Users/tfennelly/projects/A
     ./index.js changes synchronized.
 ```
 
-In the above case `slink` sits and watches for changes in `../A`.
+In the above case `xlink` sits and watches for changes in `../A`.
 
-> Note: You can also `slink` using the package name (i.e. not a relative path). This works so long as the package being `slink`d has been `npm link`d.
+> Note: You can also `xlink` using the package name (i.e. not a relative path). This works so long as the package being `xlink`d has been `npm link`d.
 
 > Note: If `../A/package.json` contains a `files` spec, that spec will be honoured i.e. only files covered by the spec will be synchronized.
 
-> Note: You can specify multiple packages to be "slinked" e.g. `slink ../X ../Y ../Z`
+> Note: You can specify multiple packages to be "xlinked" e.g. `xlink ../X ../Y ../Z`

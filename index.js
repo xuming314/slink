@@ -11,14 +11,14 @@ var path = require('path');
 var rimraf = require('rimraf');
 var _string = require('underscore.string');
 var syncLog = {};
-var numSlinks = 0;
+var numXlinks = 0;
 
 npm.load(function() {
     var gPrefix = npm.config.get('prefix');
     var gNodeModules = gPrefix + '/lib/node_modules';
     
     if (process.argv.length < 3) {
-        error("*** You must supply package name(s) to be slink'd. (-h for help)");
+        error("*** You must supply package name(s) to be xlink'd. (-h for help)");
         return;
     }
     
@@ -37,7 +37,7 @@ npm.load(function() {
         }
     }
 
-    function doSlink(packageName) {
+    function doXlink(packageName) {
         if (fs.existsSync(packageName)) {
             // The user provided a path instead of a package name.
             var packageLinkDir = path.resolve(process.cwd(), packageName);
@@ -67,7 +67,7 @@ npm.load(function() {
             error("*** Package '" + packageName + "' has not yet been installed in this package/project.");
             return;
         }
-        var slinkMarkerFile = path.resolve(packageLocalNMDir, '.slink');
+        var xlinkMarkerFile = path.resolve(packageLocalNMDir, '.xlink');
 
         var linkedPackageJSON = require(packageLinkDir + '/package.json');
 
@@ -77,15 +77,15 @@ npm.load(function() {
         console.log('Watching for changes in ' + packageLinkDir);
 
         // Create the marker file.
-        fs.writeFileSync(slinkMarkerFile, '');
+        fs.writeFileSync(xlinkMarkerFile, '');
 
-        numSlinks++;
+        numXlinks++;
     }
 
-    // Slink all the packages/dirs listed in the remaining
+    // Xlink all the packages/dirs listed in the remaining
     // command line args...
     for (var i = 2; i < process.argv.length; i++) {
-        doSlink(process.argv[i]);
+        doXlink(process.argv[i]);
     }
 });
 
@@ -145,11 +145,11 @@ function watchAll(packageName, packageLinkDir, packageLocalNMDir, filesSpec, tel
                     //if (linkFile !== 'package.json') {
                         var logPrefix = '    ';
 
-                        if (numSlinks > 1) {
+                        if (numXlinks > 1) {
                             logPrefix += '[' + packageName + '] ';
                         }
 
-                        // See https://github.com/tfennelly/slink/issues/1
+                        // See https://github.com/tfennelly/xlink/issues/1
                         if (!isFileOfInterest(linkFilePath, packageLinkDir, filesSpec)) {
                             var relativeFilePath = relativeToPackageRoot + linkFile;
                             if (tellTheUser && !isToolFile(relativeFilePath)) {
@@ -174,10 +174,10 @@ function watchAll(packageName, packageLinkDir, packageLocalNMDir, filesSpec, tel
 
                         // Generate a .watch_trigger file, telling build watch tools to rebuild after a sync.
                         // This is useful because watch processes will typically not watch inside e.g. node_modules,
-                        // with the effect that we do not get a local watch triggered rebuild after slinked modules change.
-                        fs.writeFileSync('.watch_trigger', 'AUTO GENERATED - add to .gitignore \n\nChange watch trigger file. Created/updated by e.g. slink. Used by build "watch" tools.');
+                        // with the effect that we do not get a local watch triggered rebuild after xlinked modules change.
+                        fs.writeFileSync('.watch_trigger', 'AUTO GENERATED - add to .gitignore \n\nChange watch trigger file. Created/updated by e.g. xlink. Used by build "watch" tools.');
                     //} else {
-                        //console.log('*** Looks like the package.json file in the linked package has changed. Please reinstall and reslink.');
+                        //console.log('*** Looks like the package.json file in the linked package has changed. Please reinstall and rexlink.');
                         //process.exit(0);
                     //}
                 }
@@ -246,13 +246,13 @@ function error(message) {
 function printHelp() {
     console.log("------------------------------------------------------");
     console.log("");
-    console.log("slink is a source only 'link' i.e. it does");
+    console.log("xlink is a source only 'link' i.e. it does");
     console.log("not link the node_modules dir, which means that the");
     console.log("linked package will have a properly flattened");
     console.log("and deduped node-modules dir wrt the package(s)");
     console.log("being linked into.");
     console.log("");
-    console.log("Goto https://www.npmjs.com/package/slink for usage");
+    console.log("Goto https://www.npmjs.com/package/xlink for usage");
     console.log("details.");
     console.log("------------------------------------------------------");
 }
